@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun 14 16:06:19 2018
-
-@author: stjepan
-"""
-
 # -*- coding: utf-8 -*-
 
 # !/usr/bin/python
@@ -23,7 +15,7 @@ Created on Thu Jun 14 16:06:19 2018
 # Thanks to @maxwell: https://www.kaggle.com/maxwell110/python3-version-image-downloader
 
 import sys, os, multiprocessing, csv
-from urllib import request, error
+from urllib import request
 from PIL import Image
 from io import BytesIO
 import tqdm

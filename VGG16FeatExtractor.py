@@ -3,14 +3,14 @@ import pandas as pd
 import glob
 import cv2
 
-from keras.applications.resnet50 import ResNet50
+from keras.applications.vgg16 import VGG16
 from keras.optimizers import Adam
 from keras.layers import GlobalAveragePooling2D
 from keras import Model
 from keras.applications.imagenet_utils import preprocess_input
 
 def get_model(num_class, input_size, feature_layer):
-    base_model = ResNet50(weights='imagenet', include_top=False,
+    base_model = VGG16(weights='imagenet', include_top=False,
                        input_shape=[input_size,input_size,3], classes=num_class)
     
     x = base_model.get_layer(feature_layer).output
@@ -51,23 +51,26 @@ def test_generator(x_train, batch_size, input_size, shuffle=False):
 
         yield batch_x
     
-feature_layer = "res5c_branch2c"
+# feature_layer = "block3_conv3"
+# feature_layer = "block4_conv3"
+feature_layer = "block5_conv3"
 
-index_path = "input/index/"
-index_list = sorted(glob.glob(index_path + "*"))
+index_path = "input/train/"
+index_list = sorted(glob.glob(index_path + "*")) # 1091756
 len_index = len(index_list)
-query_path = "input/query/"
-index_list += sorted(glob.glob(query_path + "*"))
+query_path = "input/test/"
+index_list += sorted(glob.glob(query_path + "*")) # 114943
 index_list = pd.DataFrame(index_list, columns=['path'])
-input_size = 256
+input_size = 128
 
 model = get_model(1,input_size, feature_layer)
-print('model')
+print('Model')
+
 batch_size = 128
 gen_test = test_generator(index_list, batch_size, input_size)
 feature = model.predict_generator(generator=gen_test,
                                      steps=np.ceil(index_list.shape[0] / batch_size),
                                      verbose=1)
 
-np.save("output/resnet50_feature_{}_index.npy".format(feature_layer), feature[:len_index])
-np.save("output/resnet50_feature_{}_query.npy".format(feature_layer), feature[len_index:])
+np.save("output/vgg16_feature_{}_index.npy".format(feature_layer), feature[:len_index])
+np.save("output/vgg16_feature_{}_query.npy".format(feature_layer), feature[len_index:])
