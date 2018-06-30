@@ -69,4 +69,4 @@ sub2 = pd.read_csv("input/sample_submission.csv")
 sub2['images'] = ""
 sub = pd.concat([sub, sub2])
 sub = sub.drop_duplicates(['id'])
-sub.to_csv("output/sub_vgg_pred_block5rgb_IP.csv".format(model_name, feature_layer), index=None)
+sub.to_csv("output/sub_vgg_pred.csv".format(model_name, feature_layer), index=None)
